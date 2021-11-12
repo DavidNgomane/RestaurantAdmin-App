@@ -7,7 +7,6 @@ const image = {uri: "https://images.unsplash.com/photo-1585518419759-7fe2e0fbf8a
 const RegisterPage = ({navigation}) => {
 
     const [name, setName] = useState('');
-    const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -16,7 +15,7 @@ const RegisterPage = ({navigation}) => {
         auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           // Signed in 
-          navigation.navigate("Home");
+          navigation.navigate("UpdatePage");
           const user = userCredential.user;
           return db.collection('admin').doc(user.uid).set({
               uid: user.uid,
@@ -55,18 +54,6 @@ const RegisterPage = ({navigation}) => {
                         onChangeText={name => setName(name)}
                         value={name}
                         placeholder="Enter your name"
-                    />
-                </View>
-
-                <View style={styles.TextField}>
-                    <View style={{flex: 1, flexDirection: "row", marginHorizontal: 3}}>
-                        <Text style={{flex: 1, flexDirection: "row", marginHorizontal: 10,fontWeight: "bold"}}>Surname:</Text>
-                    </View>
-                    <TextInput 
-                        style={styles.input}
-                        onChangeText={surname => setSurname(surname)}
-                        value={surname}
-                        placeholder="Enter your Surname"
                     />
                 </View>
 

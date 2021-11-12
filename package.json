@@ -10,6 +10,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-firebase/storage": "^13.0.1",
     "@react-navigation/native": "^6.0.3",
     "@react-navigation/native-stack": "^6.1.0",
     "@redmin_delishaj/react-native-select": "^1.0.6",

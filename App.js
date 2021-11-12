@@ -6,6 +6,7 @@ import LandingPage from './Screens/LandingPage';
 import RegisterPage from './Screens/RegisterPage';
 import LoginPage from './Screens/LoginPage';
 import HomePage from './Screens/HomePage';
+import UpdatePage from './Screens/Update';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ const MyStack = () => {
         <Stack.Screen name= "RegisterPage" component={RegisterPage} options= {{headerShown: false}}/>
         <Stack.Screen name= "LoginPage" component={LoginPage} options= {{headerShown: false}}/>
         <Stack.Screen name= "Home" component={HomePage} options= {{headerShown: false}}/>
+        <Stack.Screen name= "UpdatePage" component={UpdatePage} options= {{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

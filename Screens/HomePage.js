@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image, Modal, Pressable, TextInput,  Picker } from 'react-native';
+import React, { useState,  useEffect } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity,ScrollView, Image, Modal, Pressable,FlatList, TextInput,  Picker, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import constant from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { auth, db } from '../data/firebase'
@@ -9,12 +10,41 @@ const image1 = {uri: "https://images.unsplash.com/photo-1522336572468-97b06e8ef1
 
 const HomePage = ({navigation}) => {
 
-  const [modalVisible, setModalVisible] = useState(false);
+const[users, setUsers] = useState(null);
+
+const [modalVisible, setModalVisible] = useState(false);
   
-  const [image, setImage] = useState('');
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [selectedValue, setSelectedValue] = useState("");
+const [image, setImage] = useState('');
+const [name, setName] = useState('');
+const [price, setPrice] = useState('');
+const [selectedValue, setSelectedValue] = useState("");
+
+const Bookings = async () => {
+  const uid = auth?.currentUser?.uid;
+  const querySanp = await db.collection('Bookings').where("adminuid", "==", uid).get();
+  const allusers = querySanp.docs.map(docSnap=>docSnap.data())
+  console.log(allusers)
+  setUsers(allusers)
+}
+
+useEffect(() => {
+Bookings()
+}, [])
+
+const Item = ({ restaurant, numberOfPeople, date, time }) => {
+  return (
+    <ScrollView >
+      <View style={styles.listItem} >
+        <View style={{marginLeft: 10}}>
+          <Text style={styles.FlatListText}>Restaurant: {restaurant}</Text>
+          <Text style={styles.FlatListText}>Number of People: {numberOfPeople}</Text>
+          <Text style={styles.FlatListText}>Date: {date}</Text>
+          <Text style={styles.FlatListText}>Time: {time}</Text>
+        </View>
+      </View>
+    </ScrollView>
+  );
+}
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -39,7 +69,6 @@ const HomePage = ({navigation}) => {
        name: name,
        price: price,
       });
-
       
           return db.collection('Menu').add({
           uid: admin.uid,
@@ -47,14 +76,10 @@ const HomePage = ({navigation}) => {
           category: selectedValue,
           name: name,
           price: price,
-      }).then(() => {
-        
+      }).then(() => { 
             setModalVisible(!modalVisible);
       })
-     
-    
     .catch((error) => {
-     
       const errorMessage = error.message;
       alert(errorMessage)
     });
@@ -76,9 +101,20 @@ const HomePage = ({navigation}) => {
         </Text>
 
         <View style={{paddingLeft: 15, paddingTop: 15, flexDirection: "row"}}>
-          <View style={{backgroundColor: "gray",height: 100, width: 100, borderRadius: 10, marginHorizontal: 5}}></View>
-          <View style={{backgroundColor: "gray",height: 100, width: 100, borderRadius: 10, marginHorizontal: 5}}></View>
-          <View style={{backgroundColor: "gray",height: 100, width: 100, borderRadius: 10, marginHorizontal: 5}}></View>
+          <View>
+          <FlatList 
+          horizontal={true}
+              data={users}
+              renderItem={({ item }) => {
+                return(
+                  <ScrollView horizintal={true}>
+                      <Item restaurant={item.restaurant} numberOfPeople={item.numberOfPeople} date={item.date} time={item.time}/>
+                </ScrollView>
+                )}
+            }
+                keyExtractor = {(item) => item.id}
+            />
+          </View>
         </View>
 
       <Modal
@@ -92,6 +128,10 @@ const HomePage = ({navigation}) => {
         >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+
+          <View style={{marginRight: 190}}>
+              <FontAwesome name="window-close" size={24} color="#5f9ea0" onPress={() => setModalVisible(!modalVisible)}/>
+          </View>
           
           <View>
               <TouchableOpacity  onPress={pickImage}>
@@ -187,6 +227,11 @@ const HomePage = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
+      <View style={styles.Tab}>
+          <FontAwesome name="home" size={24} color="white" onPress = {() => navigation.navigate("Home")}/>
+          <FontAwesome name="list" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("Bookings")}/>
+          <MaterialIcons name="system-update" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("UpdatePage")}/>
+        </View>
     </View>
     
   )
@@ -196,6 +241,8 @@ export default HomePage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: "100%",
+    width: "100%"
 },
   Tab: {
     flexDirection: "row",
@@ -208,6 +255,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     position: 'absolute',
     bottom: 0, 
+  },
+  FlatListText:{
+    color: "#5f9ea0"
   },
   text: {
     marginTop: 300,
@@ -252,13 +302,15 @@ flatListItem: {
   fontSize: 16,
 },
 listItem: {
-  paddingLeft: 5,
-  paddingTop: 5,
+  paddingLeft: 3,
+  paddingTop: 3,
+  paddingBottom: 3,
   margin: 3,
   flex: 1,
   flexDirection: "row",
   borderRadius: 10,
-  backgroundColor: "#d3d3d3",
+  backgroundColor: "white",
+  borderWidth: 1
 },
 listItem2: {
   paddingLeft: 20,
