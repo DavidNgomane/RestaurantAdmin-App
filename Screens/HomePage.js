@@ -23,6 +23,7 @@ const Bookings = async () => {
   const uid = auth?.currentUser?.uid;
   const querySanp = await db.collection('Bookings').where("adminuid", "==", uid).get();
   const allusers = querySanp.docs.map(docSnap=>docSnap.data())
+
   console.log(allusers)
   setUsers(allusers)
 }
@@ -70,7 +71,7 @@ const Item = ({ restaurant, numberOfPeople, date, time }) => {
        price: price,
       });
       
-          return db.collection('Menu').add({
+          return db.collection( selectedValue ).add({
           uid: admin.uid,
           image: image,
           category: selectedValue,
@@ -103,11 +104,11 @@ const Item = ({ restaurant, numberOfPeople, date, time }) => {
         <View style={{paddingLeft: 15, paddingTop: 15, flexDirection: "row"}}>
           <View>
           <FlatList 
-          horizontal={true}
+          horizontal={true} showsHorizontalScrollIndicator={false}
               data={users}
               renderItem={({ item }) => {
                 return(
-                  <ScrollView horizintal={true}>
+                  <ScrollView>
                       <Item restaurant={item.restaurant} numberOfPeople={item.numberOfPeople} date={item.date} time={item.time}/>
                 </ScrollView>
                 )}
@@ -197,10 +198,14 @@ const Item = ({ restaurant, numberOfPeople, date, time }) => {
       </Modal>
 
         <View style={{paddingLeft: 15, paddingTop: 15, flexDirection: "row"}}>
+          
+        <TouchableOpacity onPress = {() => navigation.navigate("MenuPage")}>
           <Text style={{fontSize: 30, color: "#5f9ea0", textDecorationLine: "underline", 
               paddingLeft: 15, paddingTop: 15}}>
             Menu
           </Text>
+          </TouchableOpacity>
+
           <TouchableOpacity  onPress={() => setModalVisible(true)} style={{backgroundColor: "#5f9ea0", 
               marginHorizontal: 120, borderRadius: 20, width: 100, height: 40,justifyContent: "center",
               alignSelf: "center"}}>

@@ -25,7 +25,6 @@ const RegisterPage = ({navigation}) => {
          
         })
         .catch((error) => {
-         
           const errorMessage = error.message;
           alert(errorMessage)
         });
