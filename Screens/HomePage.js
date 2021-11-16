@@ -1,14 +1,38 @@
 import React, { useState,  useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity,ScrollView, Image, Modal, Pressable,FlatList, TextInput,  Picker, Alert } from 'react-native';
+import { Text, View, useWindowDimensions, StyleSheet, TouchableOpacity,ScrollView, SafeAreaView, Image, Modal, Pressable,FlatList, TextInput,  Picker, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import constant from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { auth, db } from '../data/firebase'
+import Drinks from './Drinks'
+import MealsPage from './Meals';
+import { TabView, SceneMap } from 'react-native-tab-view';
 
 const image1 = {uri: "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzF8fHJlc3RhdXJhbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"};
 
+const MealsRoute = () => (
+  <View style={{ flex: 1, backgroundColor: '#ff4081', height: 100}}>
+    <MealsPage/>
+  </View>
+);
+
+const DrinksRoute = () => (
+  <View style={{ flex: 1, backgroundColor: '#673ab7',  height: 100}}>
+    <Drinks/>
+  </View>
+);
+
+const renderScene = SceneMap({
+  meals: MealsRoute,
+  drinks: DrinksRoute,
+});
+
+
+
 const HomePage = ({navigation}) => {
+  
+  const layout = useWindowDimensions();
 
 const[users, setUsers] = useState(null);
 
@@ -86,8 +110,15 @@ const Item = ({ restaurant, numberOfPeople, date, time }) => {
     });
   }
 
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'meals', title: 'Meals' },
+    { key: 'drinks', title: 'Drinks' },
+  ])
+
   return (
     <View  style={styles.container}>
+        {/*
         <View style={styles.Top}>
                 <Image source = {image1} resizeMode="stretch" style={styles.image1}/>
             <View  style={styles.HeadText}>
@@ -95,9 +126,9 @@ const Item = ({ restaurant, numberOfPeople, date, time }) => {
                   Restaurant
                 </Text>
             </View>
-        </View>
+        </View>*/}
 
-        <Text style={{fontSize: 30, color: "#5f9ea0", textDecorationLine: "underline", paddingLeft: 15, paddingTop: 7}}>
+        <Text style={{fontSize: 30, color: "#5f9ea0", textDecorationLine: "underline", paddingLeft: 15, paddingTop: 7, marginTop: 15}}>
           Bookings
         </Text>
 
@@ -211,27 +242,15 @@ const Item = ({ restaurant, numberOfPeople, date, time }) => {
               alignSelf: "center"}}>
             <Text style={{textAlign: "center", color: "#fff"}}> Add </Text>
           </TouchableOpacity>
-        </View>
-        
-      <View style={{flexDirection: "row", marginHorizontal: 10, marginTop: 5}}>
-        <View style={{flexDirection: "row", marginHorizontal: 35}}>
-          <TouchableOpacity>
-            <Text>All</Text>
-          </TouchableOpacity>
+
         </View>
 
-        <View style={{flexDirection: "row", marginHorizontal: 35}}>
-          <TouchableOpacity>
-            <Text>Meals</Text>
-          </TouchableOpacity>
-        </View>
-          
-        <View style={{flexDirection: "row", marginHorizontal: 35}}>
-          <TouchableOpacity>
-            <Text>Drinks</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+         <TabView 
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            initialLayout={{ width: layout.width }}
+         />  
       <View style={styles.Tab}>
           <FontAwesome name="home" size={24} color="white" onPress = {() => navigation.navigate("Home")}/>
           <FontAwesome name="list" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("Bookings")}/>

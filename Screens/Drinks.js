@@ -40,15 +40,6 @@ const Item = ({ image, name, price }) => {
 }
     return(
         <View style={styles.container}>
-           <View style={styles.Top}>
-                <Image source = {image1} resizeMode="stretch" style={styles.image1}/>
-            <View  style={styles.HeadText}>
-                <Text style={styles.TextRestaurant}>
-                  Drinks
-                </Text>
-            </View>
-        </View>
-
         <FlatList 
             showsVerticalScrollIndicator={false}
               data={users}
