@@ -38,7 +38,7 @@ const pickImage = async () => {
             image: image,
             description: description
           })
-          .then((snapShot) => navigation.navigate("Home"))
+          .then((snapShot) => navigation.navigate("Profile"))
           .catch((error) => {
             const errorMessage = error.message;
             alert("Couldn't update resturant Details");
@@ -54,7 +54,7 @@ const pickImage = async () => {
 return (
     <View  style={styles.container}>
       <View style={{marginLeft: 30, marginTop: 40}}>
-        <FontAwesome name="window-close" size={24} color="#5f9ea0" onPress={() => navigation.navigate("Home")}/>
+        <FontAwesome name="window-close" size={24} color="#5f9ea0" onPress={() => navigation.navigate("Profile")}/>
     </View>
 
     <View style={{justifyContent: "center", alignItems: "center"}}>

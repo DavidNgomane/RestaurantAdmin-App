@@ -8,8 +8,18 @@ import { auth, db } from '../data/firebase'
 import Drinks from './Drinks'
 import MealsPage from './Meals';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import moment from 'moment';
 
 const image1 = {uri: "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzF8fHJlc3RhdXJhbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"};
+
+const AllRoute = () => (
+  <View style={{ flex: 1, backgroundColor: '#2e8b57', }}>
+    <Text style={{color: "#fff", fontSize: 20}}>Meals</Text>
+    <MealsPage/>
+    <Text style={{color: "#fff", fontSize: 20}}>Drinks</Text>
+    <Drinks/>
+  </View>
+);
 
 const MealsRoute = () => (
   <View style={{ flex: 1, backgroundColor: '#ff4081', height: 100}}>
@@ -24,15 +34,14 @@ const DrinksRoute = () => (
 );
 
 const renderScene = SceneMap({
+  all: AllRoute,
   meals: MealsRoute,
   drinks: DrinksRoute,
 });
 
-
-
 const HomePage = ({navigation}) => {
   
-  const layout = useWindowDimensions();
+const layout = useWindowDimensions();
 
 const[users, setUsers] = useState(null);
 
@@ -56,20 +65,6 @@ useEffect(() => {
 Bookings()
 }, [])
 
-const Item = ({ restaurant, numberOfPeople, date, time }) => {
-  return (
-    <ScrollView >
-      <View style={styles.listItem} >
-        <View style={{marginLeft: 10}}>
-          <Text style={styles.FlatListText}>Restaurant: {restaurant}</Text>
-          <Text style={styles.FlatListText}>Number of People: {numberOfPeople}</Text>
-          <Text style={styles.FlatListText}>Date: {date}</Text>
-          <Text style={styles.FlatListText}>Time: {time}</Text>
-        </View>
-      </View>
-    </ScrollView>
-  );
-}
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -112,9 +107,35 @@ const Item = ({ restaurant, numberOfPeople, date, time }) => {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
+    { key: 'all', title: 'All' },
     { key: 'meals', title: 'Meals' },
     { key: 'drinks', title: 'Drinks' },
   ])
+
+  const RenderCard = ({item}) => {
+    return (
+    
+            <View style={styles.listItem}>
+               <View style={{margin: 10}}>
+                <Text>
+                <Text style={{fontWeight: 'bold'}}>
+                   Restaurant:
+                </Text> {item.Restaurant}
+                </Text>
+               <Text>
+               <Text style={{fontWeight: 'bold'}}>
+                  Guests:
+                </Text> {item.numberOfpeople}
+                </Text>        
+                  <Text>
+                    {moment(item.date).format('MM DD YYYY, hh:mm a')}
+                    
+                </Text> 
+              </View>
+            </View>
+       
+    )
+  }
 
   return (
     <View  style={styles.container}>
@@ -134,20 +155,14 @@ const Item = ({ restaurant, numberOfPeople, date, time }) => {
 
         <View style={{paddingLeft: 15, paddingTop: 15, flexDirection: "row"}}>
           <View>
-          <FlatList 
+          <FlatList
           horizontal={true} showsHorizontalScrollIndicator={false}
-              data={users}
-              renderItem={({ item }) => {
-                return(
-                  <ScrollView>
-                      <Item restaurant={item.restaurant} numberOfPeople={item.numberOfPeople} date={item.date} time={item.time}/>
-                </ScrollView>
-                )}
-            }
-                keyExtractor = {(item) => item.id}
-            />
+                    data={users}
+                    renderItem={({item})=> {return <RenderCard item={item} />}}
+                    keyExtractor={(item) =>item.uid}             
+              />
           </View>
-        </View>
+          </View>
 
       <Modal
           animationType="slide"
@@ -254,7 +269,7 @@ const Item = ({ restaurant, numberOfPeople, date, time }) => {
       <View style={styles.Tab}>
           <FontAwesome name="home" size={24} color="white" onPress = {() => navigation.navigate("Home")}/>
           <FontAwesome name="list" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("Bookings")}/>
-          <MaterialIcons name="system-update" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("UpdatePage")}/>
+          <MaterialIcons name="system-update" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("Profile")}/>
         </View>
     </View>
     
