@@ -120,16 +120,24 @@ Bookings()
                 <Text>
                 <Text style={{fontWeight: 'bold'}}>
                    Restaurant:
-                </Text> {item.Restaurant}
+                </Text> {item.restaurant}
                 </Text>
                <Text>
                <Text style={{fontWeight: 'bold'}}>
                   Guests:
-                </Text> {item.numberOfpeople}
+                </Text> {item.numberOfPeople}
                 </Text>        
                   <Text>
-                    {moment(item.date).format('MM DD YYYY, hh:mm a')}
-                    
+                    <Text style={{fontWeight: 'bold'}}>
+                      Date: 
+                      </Text>
+                    {moment(item.date.toDate()).format('MM/DD/YYYY')}
+                </Text> 
+                <Text>
+                    <Text style={{fontWeight: 'bold'}}>
+                      Time: 
+                      </Text>
+                    {moment(item.date.toDate()).format('HH:mm a')}
                 </Text> 
               </View>
             </View>
