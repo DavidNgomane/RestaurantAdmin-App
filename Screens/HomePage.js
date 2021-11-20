@@ -139,6 +139,17 @@ Bookings()
                       </Text>
                     {moment(item.date.toDate()).format('HH:mm a')}
                 </Text> 
+                <View style={{ flexDirection: "row"}}>
+                <TouchableOpacity style={{backgroundColor: "#5f9ea0", 
+                    marginHorizontal: 5, borderRadius: 20, width: 50, height: 25, width: 80, marginTop: 10}}>
+                  <Text style={{textAlign: "center", color: "#fff"}}> Approve </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{backgroundColor: "#ff0000", 
+                    marginHorizontal: 5, borderRadius: 20, width: 50, height: 25, width: 80, marginTop: 10}}>
+                  <Text style={{textAlign: "center", color: "#fff"}}> Cancel </Text>
+                </TouchableOpacity>
+                </View>
               </View>
             </View>
        
@@ -157,11 +168,11 @@ Bookings()
             </View>
         </View>*/}
 
-        <Text style={{fontSize: 30, color: "#5f9ea0", textDecorationLine: "underline", paddingLeft: 15, paddingTop: 7, marginTop: 15}}>
+        <Text style={{fontSize: 20, color: "#5f9ea0", textDecorationLine: "underline", paddingLeft: 15, paddingTop: 7, marginTop: 15}}>
           Bookings
         </Text>
 
-        <View style={{paddingLeft: 15, paddingTop: 15, flexDirection: "row"}}>
+        <View style={{paddingLeft: 15, paddingTop: 10, flexDirection: "row"}}>
           <View>
           <FlatList
           horizontal={true} showsHorizontalScrollIndicator={false}
@@ -251,17 +262,17 @@ Bookings()
         </View>
       </Modal>
 
-        <View style={{paddingLeft: 15, paddingTop: 15, flexDirection: "row"}}>
+        <View style={{paddingLeft: 15, paddingTop: 1, flexDirection: "row"}}>
           
         <TouchableOpacity onPress = {() => navigation.navigate("MenuPage")}>
-          <Text style={{fontSize: 30, color: "#5f9ea0", textDecorationLine: "underline", 
-              paddingLeft: 15, paddingTop: 15}}>
+          <Text style={{fontSize: 20, color: "#5f9ea0", textDecorationLine: "underline", 
+              paddingLeft: 15, paddingTop: 10}}>
             Menu
           </Text>
           </TouchableOpacity>
 
           <TouchableOpacity  onPress={() => setModalVisible(true)} style={{backgroundColor: "#5f9ea0", 
-              marginHorizontal: 120, borderRadius: 20, width: 100, height: 40,justifyContent: "center",
+              marginHorizontal: 120, borderRadius: 20, width: 100, height: 20,justifyContent: "center",
               alignSelf: "center"}}>
             <Text style={{textAlign: "center", color: "#fff"}}> Add </Text>
           </TouchableOpacity>
@@ -361,7 +372,7 @@ listItem: {
 },
 listItem2: {
   paddingLeft: 20,
-  paddingTop: 10,
+  paddingTop: 5,
   flex: 1,
   flexDirection: "column",
   borderRadius: 10,
