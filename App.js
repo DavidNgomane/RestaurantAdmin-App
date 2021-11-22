@@ -11,6 +11,7 @@ import MenuPage from './Screens/Menu';
 import MealsPage from './Screens/Meals';
 import Drinks from './Screens/Drinks';
 import Profile from './Screens/Profile';
+import BookingDetails from './Screens/BookingDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,7 @@ const MyStack = () => {
         <Stack.Screen name= "MealsPage" component={MealsPage} options= {{headerShown: false}}/>
         <Stack.Screen name= "Drinks" component={Drinks} options= {{headerShown: false}}/>
         <Stack.Screen name= "Profile" component={Profile} options= {{headerShown: false}}/>
+        <Stack.Screen name= "BookingDetails" component={BookingDetails} options= {{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

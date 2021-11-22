@@ -73,8 +73,7 @@ export default function Profile ({navigation}) {
             </View>
 
             <View style={styles.Tab}>
-                <FontAwesome name="home" size={24} color="white" onPress = {() => navigation.navigate("Home")}/>
-                <FontAwesome name="list" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("Bookings")}/>
+                <FontAwesome name="home" size={24} color="white"  style={{marginLeft: 70}} onPress = {() => navigation.navigate("Home")}/>
                 <MaterialIcons name="system-update" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("Profile")}/>
             </View>
 

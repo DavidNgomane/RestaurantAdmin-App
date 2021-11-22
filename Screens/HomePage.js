@@ -39,7 +39,7 @@ const renderScene = SceneMap({
   drinks: DrinksRoute,
 });
 
-const HomePage = ({navigation}) => {
+const HomePage = ({navigation, route}) => {
   
 const layout = useWindowDimensions();
 
@@ -52,12 +52,15 @@ const [name, setName] = useState('');
 const [price, setPrice] = useState('');
 const [selectedValue, setSelectedValue] = useState("");
 
+const [key, setKey] = useState('');
+const [status, setStatus] = useState("");
+
 const Bookings = async () => {
   const uid = auth?.currentUser?.uid;
   const querySanp = await db.collection('Bookings').where("adminuid", "==", uid).get();
-  const allusers = querySanp.docs.map(docSnap=>docSnap.data())
+  const allusers = querySanp.docs.map(docSnap=>docSnap.data());
 
-  console.log(allusers)
+  console.log(key)
   setUsers(allusers)
 }
 
@@ -89,7 +92,6 @@ Bookings()
        name: name,
        price: price,
       });
-      
           return db.collection( selectedValue ).add({
           uid: admin.uid,
           image: image,
@@ -112,10 +114,14 @@ Bookings()
     { key: 'drinks', title: 'Drinks' },
   ])
 
+ 
+
   const RenderCard = ({item}) => {
     return (
-    
-            <View style={styles.listItem}>
+            <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('BookingDetails', {key: item.key,
+            restaurant: item.restaurant,
+            numberOfPeople: item.numberOfPeople
+            })}>
                <View style={{margin: 10}}>
                 <Text>
                 <Text style={{fontWeight: 'bold'}}>
@@ -139,36 +145,23 @@ Bookings()
                       </Text>
                     {moment(item.date.toDate()).format('HH:mm a')}
                 </Text> 
-                <View style={{ flexDirection: "row"}}>
-                <TouchableOpacity style={{backgroundColor: "#5f9ea0", 
-                    marginHorizontal: 5, borderRadius: 20, width: 50, height: 25, width: 80, marginTop: 10}}>
-                  <Text style={{textAlign: "center", color: "#fff"}}> Approve </Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity style={{backgroundColor: "#ff0000", 
-                    marginHorizontal: 5, borderRadius: 20, width: 50, height: 25, width: 80, marginTop: 10}}>
-                  <Text style={{textAlign: "center", color: "#fff"}}> Cancel </Text>
-                </TouchableOpacity>
-                </View>
+                <Text>
+                <Text style={{fontWeight: 'bold'}}>
+                   Status:
+                </Text> {item.status}
+                </Text>
+
               </View>
-            </View>
-       
+            </TouchableOpacity>
     )
   }
 
   return (
     <View  style={styles.container}>
-        {/*
-        <View style={styles.Top}>
-                <Image source = {image1} resizeMode="stretch" style={styles.image1}/>
-            <View  style={styles.HeadText}>
-                <Text style={styles.TextRestaurant}>
-                  Restaurant
-                </Text>
-            </View>
-        </View>*/}
 
-        <Text style={{fontSize: 20, color: "#5f9ea0", textDecorationLine: "underline", paddingLeft: 15, paddingTop: 7, marginTop: 15}}>
+        <Text style={{fontSize: 20, color: "#5f9ea0", textDecorationLine: "underline", 
+        paddingLeft: 15, paddingTop: 7, marginTop: 15, textAlign: "center" }}>
           Bookings
         </Text>
 
@@ -178,7 +171,7 @@ Bookings()
           horizontal={true} showsHorizontalScrollIndicator={false}
                     data={users}
                     renderItem={({item})=> {return <RenderCard item={item} />}}
-                    keyExtractor={(item) =>item.uid}             
+                    keyExtractor={(item) => item.uid}             
               />
           </View>
           </View>
@@ -286,9 +279,8 @@ Bookings()
             initialLayout={{ width: layout.width }}
          />  
       <View style={styles.Tab}>
-          <FontAwesome name="home" size={24} color="white" onPress = {() => navigation.navigate("Home")}/>
-          <FontAwesome name="list" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("Bookings")}/>
-          <MaterialIcons name="system-update" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("Profile")}/>
+          <FontAwesome name="home" size={24} color="white" style={{marginLeft: 60}} onPress = {() => navigation.navigate("Home")}/>
+          <FontAwesome name="user-circle-o" size={24} color="white" style={{marginLeft: 130}} onPress = {() => navigation.navigate("Profile")}/>
         </View>
     </View>
     
