@@ -1,7 +1,7 @@
 import React, { useState,  useEffect } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity,ScrollView,FlatList, TextInput } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { auth, db } from '../data/firebase'
+import {auth, db, storageRef, fb } from '../data/firebase'
 import constant from 'expo-constants';
 
 const image1 = {uri: "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzF8fHJlc3RhdXJhbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"};
@@ -12,15 +12,18 @@ const DrinksPage = () => {
   const uid = auth.currentUser.uid;
     
   const getUsers = async () => {
-          const querySanp = await db.collection('drinks').where('uid', '==', uid).get()
-          const allusers = querySanp.docs.map(docSnap=>docSnap.data())
-          console.log(allusers)
-          setUsers(allusers)
-  }
+    const querySanp = await db.collection('drinks').where('uid', '==', uid).onSnapshot((querySanp) => {
+      const allusers = querySanp.docs.map(docSnap=>docSnap.data())
+      console.log(allusers)
+      setUsers(allusers)})
+    
+}
 
-  useEffect(() => {
-      getUsers()
-  }, [])
+useEffect(() => {
+getUsers()
+}, [])
+
+
 
 
 const Item = ({ image, name, price }) => {

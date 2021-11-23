@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import constant from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
-import { auth, db } from '../data/firebase'
+import { auth, db, storageRef, fb } from '../data/firebase'
 import Drinks from './Drinks'
 import MealsPage from './Meals';
 import { TabView, SceneMap } from 'react-native-tab-view';
@@ -59,30 +59,53 @@ const Bookings = async () => {
   const uid = auth?.currentUser?.uid;
   const querySanp = await db.collection('Bookings').where("adminuid", "==", uid).get();
   const allusers = querySanp.docs.map(docSnap=>docSnap.data());
-
   console.log(key)
   setUsers(allusers)
 }
-
 useEffect(() => {
 Bookings()
 }, [])
 
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+const pickImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  console.log(result.uri);
+
+  if (!result.cancelled) {
+    setImage(result.uri);
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError("Network request failed!"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", result.uri, true);
+      xhr.send(null);
     });
 
-    console.log(result);
+    const ref = storageRef.child(new Date().toISOString());
+    const snapshot = (await ref.put(blob)).ref
+      .getDownloadURL()
+      .then((imageUrl) => {
+        setImage(imageUrl);
+        console.log(
+          imageUrl,
+          "this is setting the image too storage before 3"
+        );
 
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
+        blob.close();
+      });
+  }
+};
 
   const booking = () => {
     const admin = auth.currentUser;
@@ -92,9 +115,10 @@ Bookings()
        name: name,
        price: price,
       });
+
           return db.collection( selectedValue ).add({
           uid: admin.uid,
-          image: image,
+          image:image,
           category: selectedValue,
           name: name,
           price: price,
@@ -226,7 +250,7 @@ Bookings()
               <TextInput 
                 style={styles.input}
                 onChangeText={name => setName(name)}
-                value={name}
+                //value={name}
                 placeholder="Enter your name of itme"
               />
           </View>
@@ -240,7 +264,7 @@ Bookings()
               <TextInput 
                 style={styles.input}
                 onChangeText={price => setPrice(price)}
-                value={price}
+                //value={price}
                 placeholder="Enter price of item"
               />
           </View>

@@ -1,7 +1,7 @@
 import React, { useState,  useEffect } from 'react';
 import { Text, View, StyleSheet, useWindowDimensions, TouchableOpacity,ScrollView,FlatList, Image, TextInput } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { auth, db } from '../data/firebase'
+import { auth, db, storageRef, fb} from '../data/firebase'
 import constant from 'expo-constants';
 import { NavigationContainer } from '@react-navigation/native';
 import Drinks from './Drinks'

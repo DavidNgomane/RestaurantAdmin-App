@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image, FlatList,ScrollView,  TextInput } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { auth, db } from '../data/firebase'
+import { auth, db, storageRef, fb} from '../data/firebase'
 
 export default function Profile ({navigation}) {
     const[users, setUsers] = useState(null)
