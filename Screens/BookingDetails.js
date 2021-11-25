@@ -4,10 +4,14 @@ import { FontAwesome } from '@expo/vector-icons';
 import constant from 'expo-constants';
 import moment from 'moment';
 import { auth, db } from '../data/firebase'
+import { useState } from 'react/cjs/react.development';
 
 const image1 = {uri: "https://images.unsplash.com/photo-1599458448510-59aecaea4752?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTZ8fHJlc3RhdXJhbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"};
 
 const BookingDetails = ({route, navigation}) => {
+
+  const [disabled, setDisabled] = useState(false);
+  const [disabled1, setDisabled1] = useState(false);
 
     const {key} =route.params;
 
@@ -20,6 +24,7 @@ const BookingDetails = ({route, navigation}) => {
             status: "cancelled"
             })
             .then((snapShot) => {
+              setDisabled1(!disabled1)
               //navigation.navigate("AdminHome");
               alert("Booking has been cancelled");
             })
@@ -38,6 +43,7 @@ const BookingDetails = ({route, navigation}) => {
               status: "approved"
               })
               .then((snapShot) => {
+                setDisabled(!disabled)
                 //navigation.navigate("AdminHome");
                 alert("Booking has been approved");
               })
@@ -85,15 +91,15 @@ const BookingDetails = ({route, navigation}) => {
                    Time:
                 </Text> {moment(route.params.time).format("hh:mm a")}
                 </Text>
-                <View style={{ flexDirection: "row"}}>
-                <TouchableOpacity onPress={updateApprove} style={{backgroundColor: "#5f9ea0", 
-                    marginHorizontal: 5, borderRadius: 20, width: 50, height: 25, width: 80, marginTop: 10}}>
-                  <Text style={{textAlign: "center", color: "#fff"}}> Approve </Text>
+                <View style={{ flexDirection: "row", marginTop: 20, marginHorizontal: 20}}>
+                <TouchableOpacity disabled={disabled} onPress={updateApprove} style={{backgroundColor: "#5f9ea0", 
+                    marginHorizontal: 15, borderRadius: 20, width: 50, height: 25, width: 80, marginTop: 10}}>
+                  <Text style={{textAlign: "center", color: "#fff"}}> {disabled? 'Disabled': 'Approve'} </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={updateCancel} style={{backgroundColor: "#ff0000", 
-                    marginHorizontal: 5, borderRadius: 20, width: 50, height: 25, width: 80, marginTop: 10}}>
-                  <Text style={{textAlign: "center", color: "#fff"}}> Cancel </Text>
+                <TouchableOpacity disabled={disabled1} onPress={updateCancel} style={{backgroundColor: "#ff0000", 
+                    marginHorizontal: 15, borderRadius: 20, width: 50, height: 25, width: 80, marginTop: 10}}>
+                  <Text style={{textAlign: "center", color: "#fff"}}> {disabled1? 'Disabled': 'Cancel'} </Text>
                 </TouchableOpacity>
                 
                 </View>

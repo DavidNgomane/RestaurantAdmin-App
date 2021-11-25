@@ -1,5 +1,6 @@
 import React, { useState,  useEffect } from 'react';
-import { Text, View, useWindowDimensions, StyleSheet, TouchableOpacity,ScrollView, SafeAreaView, Image, Modal, Pressable,FlatList, TextInput,  Picker, Alert } from 'react-native';
+import { Text, View, useWindowDimensions, StyleSheet, TouchableOpacity,ScrollView, 
+  SafeAreaView, Image, Modal, Pressable,FlatList, TextInput,  Picker, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import constant from 'expo-constants';
@@ -54,17 +55,20 @@ const [selectedValue, setSelectedValue] = useState("");
 
 const [key, setKey] = useState('');
 const [status, setStatus] = useState("");
+const uid = auth.currentUser.uid;
 
 const Bookings = async () => {
-  const uid = auth?.currentUser?.uid;
-  const querySanp = await db.collection('Bookings').where("adminuid", "==", uid).get();
-  const allusers = querySanp.docs.map(docSnap=>docSnap.data());
-  console.log(key)
-  setUsers(allusers)
+  const querySanp = await db.collection('Bookings').where('adminuid', '==', uid).onSnapshot((querySanp) => {
+    const allusers = querySanp.docs.map(docSnap=>docSnap.data())
+    console.log(allusers)
+    setUsers(allusers)})
+  
 }
+
 useEffect(() => {
-Bookings()
+  Bookings()
 }, [])
+
 
 
 const pickImage = async () => {
@@ -144,7 +148,8 @@ const pickImage = async () => {
     return (
             <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('BookingDetails', {key: item.key,
             restaurant: item.restaurant,
-            numberOfPeople: item.numberOfPeople
+            numberOfPeople: item.numberOfPeople,
+            status: item.status
             })}>
                <View style={{margin: 10}}>
                 <Text>
