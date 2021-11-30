@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text, ImageBackground } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import constant from 'expo-constants';
@@ -13,7 +13,17 @@ const BookingDetails = ({route, navigation}) => {
   const [disabled, setDisabled] = useState(false);
   const [disabled1, setDisabled1] = useState(false);
 
-    const {key} =route.params;
+    const {key,status} =route.params;
+
+    useEffect(() => {
+      if (status== "cancelled"){
+        setDisabled(true)
+      }else if(status== "approved"){
+        setDisabled1(true)
+
+
+      
+      }     }, [])
 
     const updateCancel = () => {
         console.log(key);

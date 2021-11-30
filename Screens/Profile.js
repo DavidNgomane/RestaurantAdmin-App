@@ -48,6 +48,9 @@ export default function Profile ({navigation}) {
 }
     return (
         <View style={styles.container}>
+           <Text style={{textAlign: "center", color: "#5f9ea0", fontSize: 25, marginBottom: 10, marginTop: 40}}>
+             Update Restaurant Profile
+             </Text>
             <View>
                 <FlatList 
                     showsVerticalScrollIndicator={false}

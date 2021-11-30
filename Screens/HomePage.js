@@ -119,7 +119,6 @@ const pickImage = async () => {
        name: name,
        price: price,
       });
-
           return db.collection( selectedValue ).add({
           uid: admin.uid,
           image:image,
@@ -149,7 +148,8 @@ const pickImage = async () => {
             <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('BookingDetails', {key: item.key,
             restaurant: item.restaurant,
             numberOfPeople: item.numberOfPeople,
-            status: item.status
+            status: item.status,
+            approval: item.approval,
             })}>
                <View style={{margin: 10}}>
                 <Text>
@@ -220,6 +220,8 @@ const pickImage = async () => {
           <View style={{marginRight: 190}}>
               <FontAwesome name="window-close" size={24} color="#5f9ea0" onPress={() => setModalVisible(!modalVisible)}/>
           </View>
+
+          <Text style={{textAlign: "center", color: "#5f9ea0", fontSize: 25, marginBottom: 10, marginTop: 10}}>update Menu</Text>
           
           <View>
               <TouchableOpacity  onPress={pickImage}>
